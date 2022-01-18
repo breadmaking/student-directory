@@ -49,7 +49,7 @@ def input_students
   # create an empty array
   students = []
   # get the first name
-  name = gets.chomp
+  name = gets.chop
 
   # while the name is not empty, repeat this code
   while !name.empty? do

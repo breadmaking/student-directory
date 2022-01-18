@@ -1,3 +1,16 @@
+def input_hobbies
+  puts "Please enter the students hobbies"
+  puts "To finish, just hit return twice"
+  hobbies = []
+  hobby = gets.chomp
+  while !hobby.empty? do
+    hobbies << hobby
+    puts "#{hobby} added. #{hobbies.count} in total."
+    hobby = gets.chomp
+  end
+  return hobbies
+end
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
@@ -5,10 +18,16 @@ def input_students
   students = []
   # get the first name
   name = gets.chomp
+
   # while the name is not empty, repeat this code
   while !name.empty? do
+    hobbies = input_hobbies
+    puts 'Where was the student born?'
+    birthplace = gets.chomp
+    puts 'How old is the student?'
+    age = gets.chomp
     # add the student hash to the array
-    students << {name: name, cohort: :november}
+    students << {name: name, cohort: :november, hobbies: hobbies, birthplace: birthplace, age: age}
     puts "Now we have #{students.count} students"
     # get another name from the user
     name = gets.chomp
@@ -25,8 +44,8 @@ end
 def print(students)
   count = 0
   while students.count != count
-    students.each_with_index do |student, index|
-      puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
+    students.each.with_index(1) do |student, index|
+      puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort). Hobbies: #{student[:hobbies].join(', ')}. Birthplace: #{student[:birthplace]}. Age: #{student[:age]}."
       count += 1
     end
   end

@@ -23,9 +23,9 @@ def print_header
 end
 
 def print(students)
-  puts 'Print students starting with the letter "T"'
+  puts 'Print students starting with the names less than 12 characters'
   students.each_with_index do |student, index|
-    if student[:name][0].downcase == 't'
+    if student[:name].length < 12
       puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
     end
   end

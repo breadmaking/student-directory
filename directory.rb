@@ -38,11 +38,11 @@ def input_hobbies
   puts "Please enter the students hobbies"
   puts "To finish, just hit return twice"
   hobbies = []
-  hobby = gets.chomp
+  hobby = STDIN.gets.chomp
   while !hobby.empty? do
     hobbies << hobby
     puts "#{hobby} added. #{hobbies.count} in total."
-    hobby = gets.chomp
+    hobby = STDIN.gets.chomp
   end
   return hobbies
 end
@@ -52,56 +52,56 @@ def input_students
   puts "To finish, just hit return twice"
   # create an empty 
   # get the first name
-  name = gets.chop
+  name = STDIN.gets.chomp
 
   # while the name is not empty, repeat this code
   while !name.empty? do
     puts 'What cohort is the student in?'
-    cohort = gets.chomp
+    cohort = STDIN.gets.chomp
     cohort = 'Empty' if cohort.empty?
 
     hobbies = input_hobbies
     hobbies = ['Empty'] if hobbies.count == 0
 
     puts 'Where was the student born?'
-    birthplace = gets.chomp
+    birthplace = STDIN.gets.chomp
     birthplace = 'Empty' if birthplace.empty?
 
     puts 'How old is the student?'
-    age = gets.chomp
+    age = STDIN.gets.chomp
     age = 'Empty' if age.empty?
 
     puts "Name: #{name} - Cohort: #{cohort} - Hobbies: #{hobbies.join(', ')} - Birthplace: #{birthplace} - Age: #{age}."
     puts "Check for Typos - confirm with Y or N"
-    correct = gets.chomp
-
-    answer_given = false
-    until answer_given != false
-      if correct.downcase == 'y'
-        # add the student hash to the array
-        @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, birthplace: birthplace, age: age}
-        print_footer
-        puts "Please enter the name of the student"
-        puts "To finish, just hit return twice"
-        answer_given = true
-      elsif correct.downcase == 'n'
-        puts "Please re-enter the data"
-        puts "Please re-enter the name of the student"
-        puts "To finish, just hit return twice"
-        answer_given = true
-      else
-        puts "I didn't get that please put Y or N"
-        correct = gets.chomp
+    
+    loop do
+      correct = STDIN.gets.chomp
+    
+      case correct.downcase
+        when "y"
+          @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, birthplace: birthplace, age: age}
+          print_footer
+          puts "Please enter the name of the student"
+          puts "To finish, just hit return twice"
+          break
+        when "n"
+          puts "Please re-enter the data"
+          puts "Please re-enter the name of the student"
+          puts "To finish, just hit return twice"
+          break
+        else
+          puts "I didn't get that please put Y or N"
       end
     end
     # get another name from the user
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
   # return the array of students
   @students
 end
 
-def show_students
+def show_students1
+  
   print_header
   print
   print_footer
@@ -111,6 +111,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save Students to CSV"
+  puts "4. Load Students from CSV"
   puts "9. Exit" # 9 because we'll be adding more items
 end
 
@@ -122,6 +123,8 @@ def process(selection)
     show_students
   when "3"
     save_students
+  when "4"
+    load_students
   when "9"
     exit # this will cause the program to terminate
   else
@@ -134,19 +137,45 @@ def save_students
   file = File.open("students.csv", "w")
   # iterate over the array of students
   @students.each do |student|
-    student_data = [student[:name], student[:cohort], student[:hobbies], student[:birthplace], student[:age]]
+      hobbies = ''
+      student[:hobbies].each do |hobby|
+        hobbies += "\ #{hobby}"
+      end
+    student_data = [student[:name], student[:cohort], hobbies, student[:birthplace], student[:age]]
     csv_line = student_data.join(",")
     file.puts csv_line
   end
   file.close
 end
 
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
+  file.readlines.each do |line|
+  name, cohort, hobbies, birthplace, age = line.chomp.split(',')
+    @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies.split(" "), birthplace: birthplace, age: age}
+  end
+  file.close
+end
+
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+     puts "Loaded #{@students.count} from #{filename}"
+  else # if it doesn't exist
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
+
+
 def interactive_menu
   loop do
     #1. print menu options and as user for input
     print_menu
     #2. read input and save to varibale
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
     #3. carry out request
   end
 end

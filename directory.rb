@@ -12,7 +12,7 @@ def input_hobbies
 end
 
 def input_students
-  puts "Please enter the names of the students"
+  puts "Please enter the name of the student"
   puts "To finish, just hit return twice"
   # create an empty array
   students = []
@@ -21,14 +21,44 @@ def input_students
 
   # while the name is not empty, repeat this code
   while !name.empty? do
+    puts 'What cohort is the student in?'
+    cohort = gets.chomp
+    cohort = 'Empty' if cohort.empty?
+
     hobbies = input_hobbies
+    hobbies = ['Empty'] if hobbies.count == 0
+
     puts 'Where was the student born?'
     birthplace = gets.chomp
+    birthplace = 'Empty' if birthplace.empty?
+
     puts 'How old is the student?'
     age = gets.chomp
-    # add the student hash to the array
-    students << {name: name, cohort: :november, hobbies: hobbies, birthplace: birthplace, age: age}
-    puts "Now we have #{students.count} students"
+    age = 'Empty' if age.empty?
+
+    puts "Name: #{name} - Cohort: #{cohort} - Hobbies: #{hobbies.join(', ')} - Birthplace: #{birthplace} - Age: #{age}."
+    puts "Check for Typos"
+    correct = gets.chomp
+
+    answer_given = false
+    until answer_given != false
+      if correct.downcase == 'y'
+        # add the student hash to the array
+        students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, birthplace: birthplace, age: age}
+        puts "Now we have #{students.count} students"
+        puts "Please enter the name of the student"
+        puts "To finish, just hit return twice"
+        answer_given = true
+      elsif correct.downcase == 'n'
+        puts "Please re-enter the data"
+        puts "Please re-enter the name of the student"
+        puts "To finish, just hit return twice"
+        answer_given = true
+      else
+        puts "I didn't get that please put Y or N"
+        correct = gets.chomp
+      end
+    end
     # get another name from the user
     name = gets.chomp
   end

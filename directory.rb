@@ -23,8 +23,11 @@ def print_header
 end
 
 def print(students)
+  puts 'Print students starting with the letter "T"'
   students.each_with_index do |student, index|
-    puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
+    if student[:name][0].downcase == 't'
+      puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort)"
+    end
   end
 end
 

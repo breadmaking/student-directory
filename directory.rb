@@ -4,21 +4,25 @@ def print_header
 end
 
 def print(students)
-  all_cohorts = []
+  if students.count == 0
+    all_cohorts = []
 
-  students.each do |student|
-    all_cohorts << student[:cohort].capitalize
-  end
-
-  all_cohorts = all_cohorts.uniq
-
-  all_cohorts.each do |cohort|
-    puts "Cohort: #{cohort}"
     students.each do |student|
-      if student[:cohort].capitalize == cohort
-        puts "#{student[:name]}. Hobbies: #{student[:hobbies].join(', ')}. Birthplace: #{student[:birthplace]}. Age: #{student[:age]}."
+      all_cohorts << student[:cohort].capitalize
+    end
+
+    all_cohorts = all_cohorts.uniq
+
+    all_cohorts.each do |cohort|
+      puts "Cohort: #{cohort}"
+      students.each do |student|
+        if student[:cohort].capitalize == cohort
+          puts "#{student[:name]}. Hobbies: #{student[:hobbies].join(', ')}. Birthplace: #{student[:birthplace]}. Age: #{student[:age]}."
+        end
       end
     end
+  else
+    puts 'No Students'
   end
 end
 
@@ -26,7 +30,7 @@ def print_footer(students)
   if students.count == 1
     puts "Overall, we have #{students.count} great student"
   else
-    puts "Overall, we have #{students.count} great students"
+    puts "We have #{students.count} students"
   end
 end
 

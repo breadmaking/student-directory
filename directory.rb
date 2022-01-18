@@ -4,11 +4,20 @@ def print_header
 end
 
 def print(students)
-  count = 0
-  while students.count != count
-    students.each.with_index(1) do |student, index|
-      puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort). Hobbies: #{student[:hobbies].join(', ')}. Birthplace: #{student[:birthplace]}. Age: #{student[:age]}."
-      count += 1
+  all_cohorts = []
+
+  students.each do |student|
+    all_cohorts << student[:cohort].capitalize
+  end
+
+  all_cohorts = all_cohorts.uniq
+
+  all_cohorts.each do |cohort|
+    puts "Cohort: #{cohort}"
+    students.each do |student|
+      if student[:cohort].capitalize == cohort
+        puts "#{student[:name]}. Hobbies: #{student[:hobbies].join(', ')}. Birthplace: #{student[:birthplace]}. Age: #{student[:age]}."
+      end
     end
   end
 end

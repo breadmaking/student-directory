@@ -1,3 +1,26 @@
+def print_header
+  puts "The students of Villains Academy".center(75,'---')
+  puts "-------------".center(75,'---')
+end
+
+def print(students)
+  count = 0
+  while students.count != count
+    students.each.with_index(1) do |student, index|
+      puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort). Hobbies: #{student[:hobbies].join(', ')}. Birthplace: #{student[:birthplace]}. Age: #{student[:age]}."
+      count += 1
+    end
+  end
+end
+
+def print_footer(students)
+  if students.count == 1
+    puts "Overall, we have #{students.count} great student"
+  else
+    puts "Overall, we have #{students.count} great students"
+  end
+end
+
 def input_hobbies
   puts "Please enter the students hobbies"
   puts "To finish, just hit return twice"
@@ -37,7 +60,7 @@ def input_students
     age = 'Empty' if age.empty?
 
     puts "Name: #{name} - Cohort: #{cohort} - Hobbies: #{hobbies.join(', ')} - Birthplace: #{birthplace} - Age: #{age}."
-    puts "Check for Typos"
+    puts "Check for Typos - confirm with Y or N"
     correct = gets.chomp
 
     answer_given = false
@@ -45,7 +68,7 @@ def input_students
       if correct.downcase == 'y'
         # add the student hash to the array
         students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, birthplace: birthplace, age: age}
-        puts "Now we have #{students.count} students"
+        print_footer(students)
         puts "Please enter the name of the student"
         puts "To finish, just hit return twice"
         answer_given = true
@@ -64,25 +87,6 @@ def input_students
   end
   # return the array of students
   students
-end
-
-def print_header
-  puts "The students of Villains Academy".center(75,'---')
-  puts "-------------".center(75,'---')
-end
-
-def print(students)
-  count = 0
-  while students.count != count
-    students.each.with_index(1) do |student, index|
-      puts "#{index}. #{student[:name]} (#{student[:cohort]} cohort). Hobbies: #{student[:hobbies].join(', ')}. Birthplace: #{student[:birthplace]}. Age: #{student[:age]}."
-      count += 1
-    end
-  end
-end
-
-def print_footer(students)
-  puts "Overall, we have #{students.count} great students"
 end
 
 students = input_students
